@@ -1,0 +1,30 @@
+{
+  "name": "zhibantong-ai-office-assistant",
+  "version": "2.0.0",
+  "description": "智办通 AI 智能办公助手 —— 中文 AI 办公自动化平台（本地分析引擎 + 智能体执行层，零第三方运行依赖）",
+  "main": "src/server.js",
+  "scripts": {
+    "start": "node src/server.js",
+    "test": "node --test tests/engine.test.js tests/tools.test.js tests/eval/run-eval.js",
+    "eval": "node --test tests/eval/run-eval.js"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "keywords": [
+    "AI办公",
+    "智能体",
+    "文本分析",
+    "信息提取",
+    "待办清单",
+    "任务计划",
+    "工作报告",
+    "中文NLP",
+    "Agent"
+  ],
+  "author": "智办通项目组",
+  "license": "MIT",
+  "private": true,
+  "dependencies": {},
+  "devDependencies": {}
+}

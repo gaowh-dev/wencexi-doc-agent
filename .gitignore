@@ -1,0 +1,23 @@
+# 依赖
+node_modules/
+npm-debug.log*
+yarn-error.log*
+
+# 运行环境与系统文件
+.env
+.env.local
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# 编辑器
+.vscode/
+.idea/
+*.swp
+
+# 导出的临时结果
+*.tmp
+下载/
+
+# 浏览器端到端测试下载产物（可重新生成）
+tests/browser/downloads/

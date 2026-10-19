@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>智办通 · AI 智能办公助手</title>
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob:; connect-src 'self' https: http://localhost:* http://127.0.0.1:*; object-src 'none'; base-uri 'self'" />
+  <link rel="stylesheet" href="styles.css" />
+  <link rel="icon" href="assets/logo.svg" type="image/svg+xml" />
+</head>
+<body>
+  <header class="app-header">
+    <div class="header-inner">
+      <div class="brand">
+        <img src="assets/logo.svg" alt="智办通" class="brand-logo" />
+        <div class="brand-text">
+          <h1>智办通</h1>
+          <span>AI 智能办公助手 · 本地分析 · 数据不出电脑</span>
+        </div>
+      </div>
+      <nav class="top-nav">
+        <button class="nav-btn active" data-view="workbench">工作台</button>
+        <button class="nav-btn" data-view="history">历史任务</button>
+        <button class="nav-btn ghost" id="btnSettings">设置</button>
+        <button class="nav-btn ghost" id="btnHelp">使用帮助</button>
+      </nav>
+    </div>
+  </header>
+
+  <main class="app-main">
+    <!-- ========== 工作台 ========== -->
+    <section class="view view-workbench active" id="view-workbench">
+      <div class="layout">
+        <!-- 左：输入区 -->
+        <aside class="panel input-panel">
+          <div class="panel-head">
+            <h2>① 粘贴办公材料</h2>
+            <div class="panel-actions">
+              <button class="btn tiny" id="btnSample">加载示例</button>
+              <button class="btn tiny" id="btnUpload">上传文件</button>
+              <input type="file" id="fileInput" accept=".txt,.md,.markdown,.csv,.log" hidden />
+              <button class="btn tiny" id="btnClear">清空</button>
+            </div>
+          </div>
+          <input type="text" id="docTitle" class="doc-title" placeholder="任务名称（可选，默认自动取标题）" />
+          <textarea id="inputText" placeholder="在此粘贴会议纪要、通知公告、项目计划、工作报告、合同邮件等任意中文办公材料……&#10;&#10;点击「加载示例」可快速体验。"></textarea>
+          <div class="input-footer">
+            <span class="char-count" id="charCount">0 字</span>
+            <button class="btn primary big" id="btnAnalyze">② 一键智能分析</button>
+          </div>
+          <div class="tip-box">
+            <b>引擎说明：</b>全部分析由浏览器内置的中文规则引擎实时完成，<b>无需联网、无需 API 密钥</b>；如需更强的大模型能力，可在「设置」中配置（可选）。
+          </div>
+        </aside>
+
+        <!-- 右：结果区 -->
+        <section class="panel result-panel">
+          <div class="result-tabs" id="resultTabs">
+            <button class="tab active" data-tab="analysis">材料分析</button>
+            <button class="tab" data-tab="entities">关键信息</button>
+            <button class="tab" data-tab="todos">待办与进度</button>
+            <button class="tab" data-tab="agent">智能体执行</button>
+            <button class="tab" data-tab="plan">任务计划</button>
+            <button class="tab" data-tab="report">工作报告</button>
+            <button class="tab" data-tab="check">一致性检查</button>
+          </div>
+
+          <div class="result-toolbar" id="resultToolbar" hidden>
+            <div class="toolbar-left">
+              <button class="btn tiny" data-export="md">导出 Markdown</button>
+              <button class="btn tiny" data-export="txt">导出 TXT</button>
+              <button class="btn tiny" data-export="json">导出 JSON</button>
+              <button class="btn tiny" id="btnCopy">复制全部</button>
+              <button class="btn tiny" id="btnSave">保存到历史</button>
+            </div>
+            <div class="toolbar-right">
+              <button class="btn tiny" id="btnAIEnhance" title="可选：配置大模型 API 后对报告进行 AI 增强">✨ AI 增强（可选）</button>
+            </div>
+          </div>
+
+          <div class="result-body">
+            <div class="empty-state" id="emptyState">
+              <img src="assets/logo.svg" alt="" />
+              <h3>分析结果将显示在这里</h3>
+              <p>粘贴材料后点击「一键智能分析」，自动完成：材料分析 → 关键信息提取 → 待办清单 → 任务计划 → 工作报告 → 一致性检查。</p>
+              <div class="feature-grid">
+                <div class="feature"><b>文本分析</b><span>字数/关键词/摘要/分类</span></div>
+                <div class="feature"><b>信息提取</b><span>日期/电话/金额/机构</span></div>
+                <div class="feature"><b>待办清单</b><span>责任人/优先级/截止时间</span></div>
+                <div class="feature"><b>智能体执行</b><span>日历/CSV/派任务消息，产物自检</span></div>
+                <div class="feature"><b>任务计划</b><span>工作日排期/里程碑</span></div>
+                <div class="feature"><b>工作报告</b><span>一键生成规范报告</span></div>
+                <div class="feature"><b>矛盾检查</b><span>数据冲突/遗漏/重复</span></div>
+              </div>
+            </div>
+
+            <div class="tab-pane" id="pane-analysis" hidden></div>
+            <div class="tab-pane" id="pane-entities" hidden></div>
+            <div class="tab-pane" id="pane-todos" hidden></div>
+            <div class="tab-pane" id="pane-agent" hidden></div>
+            <div class="tab-pane" id="pane-plan" hidden></div>
+            <div class="tab-pane" id="pane-report" hidden></div>
+            <div class="tab-pane" id="pane-check" hidden></div>
+          </div>
+        </section>
+      </div>
+    </section>
+
+    <!-- ========== 历史任务 ========== -->
+    <section class="view view-history" id="view-history" hidden>
+      <div class="panel">
+        <div class="panel-head">
+          <h2>历史任务</h2>
+          <div class="panel-actions">
+            <span class="muted" id="historyCount"></span>
+            <button class="btn tiny danger" id="btnClearHistory">清空历史</button>
+          </div>
+        </div>
+        <div id="historyList" class="history-list"></div>
+      </div>
+    </section>
+  </main>
+
+  <!-- 设置弹窗 -->
+  <div class="modal-mask" id="settingsMask" hidden>
+    <div class="modal">
+      <div class="modal-head">
+        <h3>设置 · 大模型 API（可选）</h3>
+        <button class="modal-close" data-close="settingsMask">×</button>
+      </div>
+      <div class="modal-body">
+        <p class="muted small">不配置 API 密钥时，系统使用<b>内置本地中文分析引擎</b>，所有核心功能均可正常使用。填写兼容 OpenAI 接口格式的大模型后，可使用「✨ AI 增强」获得更自然的报告。密钥仅保存在本浏览器的<b>会话存储（sessionStorage）</b>中，关闭浏览器后自动清除，不会随历史任务保存，也不会上传到任何第三方。</p>
+        <label class="field"><span>API 地址（Base URL）</span>
+          <input type="text" id="setBaseUrl" placeholder="https://api.openai.com/v1" />
+        </label>
+        <label class="field"><span>API Key（密钥）</span>
+          <input type="password" id="setApiKey" placeholder="sk-..." />
+        </label>
+        <label class="field"><span>模型名称</span>
+          <input type="text" id="setModel" placeholder="gpt-4o-mini" />
+        </label>
+        <div class="settings-actions">
+          <button class="btn" id="btnTestConn">测试连接</button>
+          <button class="btn primary" id="btnSaveSettings">保存设置</button>
+        </div>
+        <div class="settings-status" id="settingsStatus"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 帮助弹窗 -->
+  <div class="modal-mask" id="helpMask" hidden>
+    <div class="modal">
+      <div class="modal-head">
+        <h3>使用帮助</h3>
+        <button class="modal-close" data-close="helpMask">×</button>
+      </div>
+      <div class="modal-body">
+        <ol class="help-list">
+          <li><b>第一步：</b>在左侧粘贴会议纪要、通知、计划、报告等任意中文办公材料，或点击「加载示例」。</li>
+          <li><b>第二步：</b>点击「一键智能分析」，几秒内得到六大类分析结果，每条待办都带置信度与原文出处。</li>
+          <li><b>第三步：</b>在「待办与进度」页可直接编辑责任人、截止时间、优先级，或手动增删任务；勾选完成事项，进度自动更新。</li>
+          <li><b>第四步：</b>打开「智能体执行」页，先补齐信息缺口，再勾选要执行的动作，系统将真实生成日历文件、CSV、派任务消息、核对清单和报告，每个产物都有自检。</li>
+          <li><b>第五步：</b>点击「保存到历史」长期留存；也可导出 Markdown / TXT / JSON 三种格式。</li>
+        </ol>
+        <p class="muted small">本地引擎能力：分句、关键词 n-gram 提取、摘要、文档分类、情感倾向、实体抽取（日期/时间/电话/邮箱/金额/百分比/机构/人物/地点/截止时间）、待办识别、工作日排期、矛盾与遗漏检查。</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- 外发内容确认弹窗（AI 增强前） -->
+  <div class="modal-mask" id="sendMask" hidden>
+    <div class="modal">
+      <div class="modal-head">
+        <h3>数据外发确认</h3>
+        <button class="modal-close" data-close="sendMask">×</button>
+      </div>
+      <div class="modal-body">
+        <p class="warn-box">你即将把<b>当前材料全文和分析结果</b>发送到你自行配置的大模型服务。发送后数据将离开本机，请确认：</p>
+        <ol class="help-list">
+          <li>发送目标：<b id="sendTarget">（你的 API 地址）</b>；</li>
+          <li>发送范围：原始材料全文 + 本地引擎生成的报告；</li>
+          <li>材料中不包含身份证、银行卡、商业机密等敏感内容，或你已确认可以发送；</li>
+          <li>不配置 API 时，所有核心功能（分析/待办/计划/报告/检查/智能体执行）均在本地完成，不影响使用。</li>
+        </ol>
+        <div class="settings-actions">
+          <button class="btn" data-close="sendMask">取消</button>
+          <button class="btn primary" id="btnConfirmSend">我确认，发送并增强</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="toast" id="toast" hidden></div>
+
+  <script src="../src/core/engine.js"></script>
+  <script src="../src/core/tools.js"></script>
+  <script src="../src/core/agent.js"></script>
+  <script src="../src/core/adapters/mobileclaw.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>

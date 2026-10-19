@@ -1,0 +1,26 @@
+{
+  "baseDate": "2026-10-19",
+  "caseCount": 16,
+  "msPerDoc": 2.37,
+  "todoRecall": 1,
+  "todoPrecision": 1,
+  "ownerRecall": 1,
+  "vagueRecall": 1,
+  "deadlineRecall": 1,
+  "personRecall": 1,
+  "forbiddenPersonHits": [],
+  "issueTypeMisses": [],
+  "counts": {
+    "expectedTodos": 29,
+    "matchedTodos": 29,
+    "actualTodos": 29,
+    "ownerSlots": 19,
+    "ownerHits": 19,
+    "vagueSlots": 5,
+    "vagueHits": 5,
+    "deadlineSlots": 20,
+    "deadlineHits": 20,
+    "personSlots": 15,
+    "personHits": 15
+  }
+}
