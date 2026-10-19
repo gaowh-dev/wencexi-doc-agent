@@ -63,6 +63,7 @@
             <button class="tab" data-tab="agent">智能体执行</button>
             <button class="tab" data-tab="plan">任务计划</button>
             <button class="tab" data-tab="report">工作报告</button>
+            <button class="tab" data-tab="dashboard">数据看板</button>
             <button class="tab" data-tab="check">一致性检查</button>
           </div>
 
@@ -91,6 +92,7 @@
                 <div class="feature"><b>智能体执行</b><span>日历/CSV/派任务消息，产物自检</span></div>
                 <div class="feature"><b>任务计划</b><span>工作日排期/里程碑</span></div>
                 <div class="feature"><b>工作报告</b><span>一键生成规范报告</span></div>
+                <div class="feature"><b>数据看板</b><span>优先级/责任人/时间线图表</span></div>
                 <div class="feature"><b>矛盾检查</b><span>数据冲突/遗漏/重复</span></div>
               </div>
             </div>
@@ -101,6 +103,7 @@
             <div class="tab-pane" id="pane-agent" hidden></div>
             <div class="tab-pane" id="pane-plan" hidden></div>
             <div class="tab-pane" id="pane-report" hidden></div>
+            <div class="tab-pane" id="pane-dashboard" hidden></div>
             <div class="tab-pane" id="pane-check" hidden></div>
           </div>
         </section>
@@ -266,6 +269,7 @@
   <script src="../src/core/agent.js"></script>
   <script src="../src/core/adapters/mobileclaw.js"></script>
   <script src="recorder.js"></script>
+  <script src="charts.js"></script>
   <script src="app.js"></script>
 </body>
 </html>

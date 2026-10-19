@@ -22,9 +22,15 @@ PASS  报告/清单 .md 真实下载
 screenshot => v2-03-todos-editable.png
 screenshot => v2-04-check.png
 screenshot => v2-05-report.png
+PASS  数据看板正常渲染  {"svg":4,"kpi":6}
+PASS  数据看板图表条目完整  条形 16 行，时间线 9 点
+PASS  数据看板 7 个图表齐全  任务完成进度|优先级分布|置信度分布|一致性检查问题构成|责任人任务分布|任务阶段分布|截止时间线
+screenshot => v2-08-dashboard.png
 PASS  手机视口下分析正常完成  8 条
 screenshot => v2-06-mobile-agent.png
 screenshot => v2-07-mobile-todos.png
+PASS  手机视口数据看板正常  {"kpi":6,"svg":4}
+screenshot => v2-09-mobile-dashboard.png
 PASS  手机视口无 JS 错误
 PASS  手机视口无横向溢出  溢出 0px
 PASS  页面无 JS 运行时错误

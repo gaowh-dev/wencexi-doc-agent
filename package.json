@@ -1,7 +1,7 @@
 {
   "name": "zhibantong-ai-office-assistant",
-  "version": "2.0.0",
-  "description": "智办通 AI 智能办公助手 —— 中文 AI 办公自动化平台（本地分析引擎 + 智能体执行层，零第三方运行依赖）",
+  "version": "2.2.0",
+  "description": "智办通 AI 智能办公助手 —— 中文 AI 办公自动化平台（本地分析引擎 + 智能体执行层 + 可视化看板，零第三方运行依赖）",
   "main": "src/server.js",
   "scripts": {
     "start": "node src/server.js",

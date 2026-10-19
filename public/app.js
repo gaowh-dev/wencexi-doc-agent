@@ -122,6 +122,7 @@
     renderAgent();
     renderPlan();
     renderReport();
+    renderDashboard();
     renderCheck();
     renderTabBadges();
   }
@@ -266,7 +267,7 @@
           t.status = cb.checked ? 'done' : 'pending';
           renderTodos();
           recomputeDerived();
-          renderPlan(); renderReport(); renderCheck(); renderAgent(); renderTabBadges();
+          renderPlan(); renderReport(); renderDashboard(); renderCheck(); renderAgent(); renderTabBadges();
         }
       });
     });
@@ -290,7 +291,7 @@
         t.priority = sel.value;
         t.confidence = 'high'; t.confidenceReasons = ['人工修改优先级'];
         recomputeDerived();
-        renderPlan(); renderReport(); renderAgent();
+        renderPlan(); renderReport(); renderDashboard(); renderAgent();
       });
     });
 
@@ -303,7 +304,7 @@
         t.content = v;
         t.confidence = 'high'; t.confidenceReasons = ['人工修改任务内容'];
         recomputeDerived();
-        renderPlan(); renderReport(); renderCheck(); renderAgent();
+        renderPlan(); renderReport(); renderDashboard(); renderCheck(); renderAgent();
       });
     });
 
@@ -315,7 +316,7 @@
         t.owners = parts; t.vagueOwners = []; t.owner = parts.join('、');
         t.confidence = 'high'; t.confidenceReasons = ['人工指定责任人'];
         recomputeDerived();
-        renderPlan(); renderReport(); renderCheck(); renderAgent();
+        renderPlan(); renderReport(); renderDashboard(); renderCheck(); renderAgent();
       });
     });
 
@@ -328,7 +329,7 @@
         t.deadlineRaw = inp.value ? ('人工设定：' + inp.value) : '';
         t.confidence = 'high'; t.confidenceReasons = ['人工设定截止时间'];
         recomputeDerived();
-        renderPlan(); renderReport(); renderCheck(); renderAgent();
+        renderPlan(); renderReport(); renderDashboard(); renderCheck(); renderAgent();
       });
     });
 
@@ -664,6 +665,12 @@
   }
 
   /* ---------------- 一致性检查 ---------------- */
+  /* ---------------- 数据看板（可视化） ---------------- */
+  function renderDashboard() {
+    $('pane-dashboard').innerHTML = window.Charts ? Charts.render(state.result) :
+      '<p class="muted">可视化模块加载失败，请检查 charts.js。</p>';
+  }
+
   function renderCheck() {
     var c = state.result.check;
     var html = '<div class="check-banner ' + (c.summary.passed ? 'pass' : 'fail') + '">' +

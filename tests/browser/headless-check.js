@@ -241,6 +241,25 @@ async function setViewport(sid, width, height, dpr) {
   await sleep(300);
   await shot(sid, 'v2-05-report.png');
 
+  // 8b. 数据看板（可视化）
+  await evalJs(sid, 'document.querySelector(\'.tab[data-tab="dashboard"]\').click()');
+  await sleep(400);
+  const dash = await evalJs(sid, `(() => {
+    const p = document.getElementById('pane-dashboard');
+    return {
+      visible: !p.hidden,
+      svg: p.querySelectorAll('svg').length,
+      kpi: p.querySelectorAll('.kpi-card').length,
+      bars: p.querySelectorAll('.bar-row').length,
+      dots: p.querySelectorAll('.chart-card.wide circle').length,
+      titles: Array.from(p.querySelectorAll('.chart-head h4')).map(function (e) { return e.textContent; }).join('|')
+    };
+  })()`);
+  check('数据看板正常渲染', dash.visible && dash.svg >= 4 && dash.kpi === 6, JSON.stringify({ svg: dash.svg, kpi: dash.kpi }));
+  check('数据看板图表条目完整', dash.bars >= 10 && dash.dots >= 8, '条形 ' + dash.bars + ' 行，时间线 ' + dash.dots + ' 点');
+  check('数据看板 7 个图表齐全', dash.titles === '任务完成进度|优先级分布|置信度分布|一致性检查问题构成|责任人任务分布|任务阶段分布|截止时间线', dash.titles);
+  await shot(sid, 'v2-08-dashboard.png');
+
   // 9. 手机视口（独立 390 宽无头实例，避免 Emulation 不支持）
   async function mobileShots() {
     const ver2 = await (await fetch('http://127.0.0.1:9223/json/version')).json();
@@ -301,6 +320,16 @@ async function setViewport(sid, width, height, dpr) {
     const r2 = await send2('Page.captureScreenshot', { format: 'png' }, attach);
     fs.writeFileSync(path.join(SHOT_DIR, 'v2-07-mobile-todos.png'), Buffer.from(r2.data, 'base64'));
     console.log('screenshot => v2-07-mobile-todos.png');
+    await send2('Runtime.evaluate', { expression: 'document.querySelector(\'.tab[data-tab="dashboard"]\').click()' }, attach);
+    await sleep(600);
+    const mDash = await send2('Runtime.evaluate', {
+      expression: 'JSON.stringify({kpi: document.querySelectorAll("#pane-dashboard .kpi-card").length, svg: document.querySelectorAll("#pane-dashboard svg").length})',
+      returnByValue: true
+    }, attach).then((r) => r.result.value);
+    check('手机视口数据看板正常', mDash === JSON.stringify({ kpi: 6, svg: 4 }), mDash);
+    const r3 = await send2('Page.captureScreenshot', { format: 'png', captureBeyondViewport: true }, attach);
+    fs.writeFileSync(path.join(SHOT_DIR, 'v2-09-mobile-dashboard.png'), Buffer.from(r3.data, 'base64'));
+    console.log('screenshot => v2-09-mobile-dashboard.png');
     check('手机视口无 JS 错误', mErrors.length === 0, mErrors.join(' | '));
     // 横向溢出检查
     const overflow = await send2('Runtime.evaluate', {
