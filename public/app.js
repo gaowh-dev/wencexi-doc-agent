@@ -895,6 +895,7 @@
     });
     $('view-workbench').hidden = name !== 'workbench';
     $('view-history').hidden = name !== 'history';
+    $('view-recording').hidden = name !== 'recording';
     if (name === 'history') renderHistory();
   }
 

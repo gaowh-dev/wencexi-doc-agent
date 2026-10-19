@@ -21,6 +21,7 @@ const SECURITY_HEADERS = {
     "script-src 'self'",
     "style-src 'self' 'unsafe-inline'",
     "img-src 'self' data: blob:",
+    "media-src 'self' blob:",
     "connect-src 'self' https: http://localhost:* http://127.0.0.1:*",
     "object-src 'none'",
     "base-uri 'self'",
@@ -29,7 +30,8 @@ const SECURITY_HEADERS = {
   'X-Content-Type-Options': 'nosniff',
   'X-Frame-Options': 'DENY',
   'Referrer-Policy': 'no-referrer',
-  'Permissions-Policy': 'geolocation=(), microphone=(), camera=()'
+  // microphone 放开给同源页面（录音纪要需要）；camera 仍禁用
+  'Permissions-Policy': 'geolocation=(), microphone=(self), camera=()'
 };
 
 const MIME = {
