@@ -1,11 +1,11 @@
 {
-  "name": "zhibantong-ai-office-assistant",
-  "version": "2.2.0",
-  "description": "智办通 AI 智能办公助手 —— 中文 AI 办公自动化平台（本地分析引擎 + 智能体执行层 + 可视化看板，零第三方运行依赖）",
+  "name": "wencexi-doc-agent",
+  "version": "2.3.0",
+  "description": "文策析｜办公文档任务智能拆解与导出工具（本地文档解析智能体：任务抽取 + CSV/ICS 导出 + 可视化看板，零第三方运行依赖）",
   "main": "src/server.js",
   "scripts": {
     "start": "node src/server.js",
-    "test": "node --test tests/engine.test.js tests/tools.test.js tests/eval/run-eval.js",
+    "test": "node --test tests/engine.test.js tests/tools.test.js tests/docx.test.js tests/eval/run-eval.js",
     "eval": "node --test tests/eval/run-eval.js"
   },
   "engines": {
@@ -22,7 +22,7 @@
     "中文NLP",
     "Agent"
   ],
-  "author": "智办通项目组",
+  "author": "文策析项目组",
   "license": "MIT",
   "private": true,
   "dependencies": {},

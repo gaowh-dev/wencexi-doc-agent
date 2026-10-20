@@ -1,5 +1,5 @@
 /*!
- * 智办通 AI 智能办公助手 —— 真实工具层（v2）
+ * 文策析 AI 智能办公助手 —— 真实工具层（v2）
  * 所有工具均为“本地执行、可验证产物”：
  *   - calendar_ics   生成标准 iCalendar 日历文件（可导入 Outlook / 苹果日历 / 飞书日历）
  *   - todo_csv       生成飞书/钉钉/Excel 可导入的待办 CSV
@@ -49,7 +49,7 @@
     return o.join('、');
   }
   function safeName(s) {
-    return String(s || '智办通').replace(/[\\/:*?"<>|]/g, '_').slice(0, 40) || '智办通';
+    return String(s || '文策析').replace(/[\\/:*?"<>|]/g, '_').slice(0, 40) || '文策析';
   }
 
   /* ============================================================
@@ -64,7 +64,7 @@
     L.push('PRODID:-//ZhiBanTong//AI Office Assistant v2//ZH');
     L.push('CALSCALE:GREGORIAN');
     L.push('METHOD:PUBLISH');
-    L.push('X-WR-CALNAME:' + icsEscape(result.title || '智办通任务日历'));
+    L.push('X-WR-CALNAME:' + icsEscape(result.title || '文策析任务日历'));
     L.push('X-WR-TIMEZONE:Asia/Shanghai');
     // 显式 VTIMEZONE 定义：Asia/Shanghai 自 1991 年起无夏令时，单一 STANDARD 即可，提升严格客户端兼容性
     L.push('BEGIN:VTIMEZONE');
@@ -82,7 +82,7 @@
       var who = ownerText(t) || '责任人待明确';
       var desc = '责任人：' + who + '\\n优先级：' + t.priority +
         (t.confidence && t.confidence !== 'high' ? '\\n【需核对】' + (t.confidenceReasons || []).join('；') : '') +
-        '\\n来源：' + icsEscape(t.source || '') + '\\n由智办通 AI 智能办公助手生成';
+        '\\n来源：' + icsEscape(t.source || '') + '\\n由文策析 AI 智能办公助手生成';
       L.push('BEGIN:VEVENT');
       L.push('UID:' + uid('evt' + i));
       L.push('DTSTAMP:' + icsDateTime(now));
@@ -200,7 +200,7 @@
     });
     var messages = Object.keys(groups).sort().map(function (name) {
       var list = groups[name];
-      var lines = ['@' + name + ' 【任务提醒】请查收以下 ' + list.length + ' 项任务（由智办通自动整理自《' + (result.title || '工作材料') + '》）：'];
+      var lines = ['@' + name + ' 【任务提醒】请查收以下 ' + list.length + ' 项任务（由文策析自动整理自《' + (result.title || '工作材料') + '》）：'];
       list.forEach(function (t, i) {
         var due = t.deadline ? t.deadline + (t.timePoint ? ' ' + t.timePoint : '前') : '（时间待明确）';
         lines.push((i + 1) + '. ' + t.content + '；截止：' + due + '（优先级：' + t.priority + '）');
@@ -245,7 +245,7 @@
    * ========================================================== */
   function buildChecklist(result) {
     var todos = result.todos || [];
-    var L = ['# ' + (result.title || '任务') + ' · 执行核对清单', '> 由智办通 AI 智能办公助手生成，可逐项打勾核对', ''];
+    var L = ['# ' + (result.title || '任务') + ' · 执行核对清单', '> 由文策析 AI 智能办公助手生成，可逐项打勾核对', ''];
     var byDate = {};
     todos.forEach(function (t) {
       var k = t.deadline || '截止时间待明确';

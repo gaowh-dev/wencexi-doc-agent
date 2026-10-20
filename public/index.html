@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>智办通 · AI 智能办公助手</title>
+  <title>文策析｜办公文档任务智能拆解与导出工具</title>
   <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob:; media-src 'self' blob:; connect-src 'self' https: http://localhost:* http://127.0.0.1:*; object-src 'none'; base-uri 'self'" />
   <link rel="stylesheet" href="styles.css" />
   <link rel="icon" href="assets/logo.svg" type="image/svg+xml" />
@@ -12,10 +12,10 @@
   <header class="app-header">
     <div class="header-inner">
       <div class="brand">
-        <img src="assets/logo.svg" alt="智办通" class="brand-logo" />
+        <img src="assets/logo.svg" alt="文策析" class="brand-logo" />
         <div class="brand-text">
-          <h1>智办通</h1>
-          <span>AI 智能办公助手 · 本地分析 · 数据不出电脑</span>
+          <h1>文策析</h1>
+          <span>办公文档任务智能拆解与导出 · 本地运行 · 数据不出电脑</span>
         </div>
       </div>
       <nav class="top-nav">
@@ -39,7 +39,7 @@
             <div class="panel-actions">
               <button class="btn tiny" id="btnSample">加载示例</button>
               <button class="btn tiny" id="btnUpload">上传文件</button>
-              <input type="file" id="fileInput" accept=".txt,.md,.markdown,.csv,.log" hidden />
+              <input type="file" id="fileInput" accept=".txt,.md,.markdown,.csv,.log,.docx" hidden />
               <button class="btn tiny" id="btnClear">清空</button>
             </div>
           </div>
@@ -135,7 +135,7 @@
           <div class="rec-body">
             <label class="field" style="margin:14px 14px 6px;">
               <span>会议主题（可选）</span>
-              <input type="text" id="recTopic" placeholder="例如：智办通项目周例会" />
+              <input type="text" id="recTopic" placeholder="例如：文策析项目周例会" />
             </label>
 
             <div class="rec-center">

@@ -15,7 +15,7 @@ PASS  产物自检全部通过  0 个失败检查
 PASS  派任务消息按责任人生成  7 组
 screenshot => v2-02-agent-after.png
 PASS  派任务消息复制功能可用  read-denied（read-denied 为无头环境限制，写入路径已用 execCommand 兜底）
-下载目录文件：智办通V1.0项目周例会分析_任务日历.ics, 智办通V1.0项目周例会分析_工作报告.md, 智办通V1.0项目周例会分析_待办清单.csv, 智办通V1.0项目周例会分析_核对清单.md
+下载目录文件：文策析V1.0项目周例会分析_任务日历.ics, 文策析V1.0项目周例会分析_工作报告.md, 文策析V1.0项目周例会分析_待办清单.csv, 文策析V1.0项目周例会分析_核对清单.md
 PASS  日历 .ics 真实下载
 PASS  待办 .csv 真实下载
 PASS  报告/清单 .md 真实下载
@@ -26,6 +26,8 @@ PASS  数据看板正常渲染  {"svg":4,"kpi":6}
 PASS  数据看板图表条目完整  条形 16 行，时间线 9 点
 PASS  数据看板 7 个图表齐全  任务完成进度|优先级分布|置信度分布|一致性检查问题构成|责任人任务分布|任务阶段分布|截止时间线
 screenshot => v2-08-dashboard.png
+PASS  Word(.docx) 上传并经本地服务解析  {"ok":true,"chars":163}
+PASS  Word 文档自动拆出任务（≥3 条，含张伟/李娟）  4 条
 PASS  手机视口下分析正常完成  8 条
 screenshot => v2-06-mobile-agent.png
 screenshot => v2-07-mobile-todos.png

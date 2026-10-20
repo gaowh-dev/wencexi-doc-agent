@@ -162,7 +162,7 @@ test('评测：应检出的问题类型全部命中', () => {
 
 const runOnce = run();
 fs.writeFileSync(path.join(__dirname, 'last-run.json'), JSON.stringify(runOnce.summary, null, 2), 'utf8');
-console.log('\n========== 智办通 引擎评测（基准日期 ' + corpus.baseDate + '）==========');
+console.log('\n========== 文策析 引擎评测（基准日期 ' + corpus.baseDate + '）==========');
 console.log('用例'.padEnd(34) + '期望 命中 实际 多出');
 runOnce.rows.forEach(function (r) {
   console.log((r.id + ' ' + r.name).slice(0, 32).padEnd(34) +

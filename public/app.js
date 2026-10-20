@@ -1,5 +1,5 @@
 /* ============================================================
- * 智办通 · 前端交互逻辑
+ * 文策析 · 前端交互逻辑
  * ============================================================ */
 (function () {
   'use strict';
@@ -20,10 +20,10 @@
 
   /* ---------------- 示例材料 ---------------- */
   var SAMPLE = [
-    '智办通V1.0产品研发项目周例会会议纪要',
+    '文策析V1.0产品研发项目周例会会议纪要',
     '时间：2026年10月21日 下午2点',
     '地点：昆明市高新区海源北路云科大厦12层大会议室',
-    '参会人员：产品部、研发部、测试组及项目组全体成员。会议由王磊总监主持，主要讨论智办通V1.0版本上线前的准备工作。',
+    '参会人员：产品部、研发部、测试组及项目组全体成员。会议由王磊总监主持，主要讨论文策析V1.0版本上线前的准备工作。',
     '',
     '一、上周进展：核心文本分析引擎已完成开发，关键词提取和待办识别功能测试通过，整体进度比原计划提前2天，客户体验调研满意度达85%。',
     '二、存在问题：移动端页面在小屏幕上存在布局错位问题，需要在10月23日之前完成修复；测试组反馈缺陷12个，其中严重缺陷2个。',
@@ -793,7 +793,7 @@
 
   /* ---------------- 导出 ---------------- */
   function safeName(s) {
-    return String(s).replace(/[\\/:*?"<>|]/g, '_').slice(0, 40) || '智办通结果';
+    return String(s).replace(/[\\/:*?"<>|]/g, '_').slice(0, 40) || '文策析结果';
   }
   function doExport(kind) {
     if (!state.result) { toast('请先执行分析'); return; }
@@ -911,8 +911,36 @@
     $('btnUpload').addEventListener('click', function () { $('fileInput').click(); });
     $('fileInput').addEventListener('change', function () {
       var f = this.files[0];
+      var input = this;
       if (!f) return;
-      if (f.size > 5 * 1024 * 1024) { toast('文件过大（限 5MB）'); return; }
+      if (f.size > 10 * 1024 * 1024) { toast('文件过大（限 10MB）'); input.value = ''; return; }
+
+      var isDocx = /\.docx$/i.test(f.name);
+      if (isDocx) {
+        // .docx 是压缩包，需由本机 Node 服务解析；静态模式（file://）不可用，给出明确引导
+        if (location.protocol === 'file:') {
+          toast('Word 解析需在服务模式运行：请双击「启动项目.bat」后通过 http://localhost 打开，或把内容另存为 .txt 后上传');
+          input.value = '';
+          return;
+        }
+        toast('正在解析 Word 文档…');
+        fetch('/api/parse-docx', { method: 'POST', body: f })
+          .then(function (r) { return r.json(); })
+          .then(function (data) {
+            if (!data.ok) throw new Error(data.error || '解析失败');
+            $('inputText').value = data.text;
+            if (!$('docTitle').value) $('docTitle').value = f.name.replace(/\.docx$/i, '');
+            updateCharCount();
+            toast('Word 文档已载入：' + f.name + '（' + data.chars + ' 字）');
+            input.value = '';
+          })
+          .catch(function (err) {
+            toast('Word 解析失败：' + (err && err.message ? err.message : err) + '（旧版 .doc 请先另存为 .docx）');
+            input.value = '';
+          });
+        return;
+      }
+
       var reader = new FileReader();
       reader.onload = function () {
         $('inputText').value = String(reader.result);
@@ -920,8 +948,9 @@
         updateCharCount();
         toast('文件已载入：' + f.name);
       };
+      reader.onerror = function () { toast('文件读取失败，请重试'); };
       reader.readAsText(f, 'utf-8');
-      this.value = '';
+      input.value = '';
     });
   }
 
@@ -934,7 +963,7 @@
     $('btnAnalyze').addEventListener('click', runAnalyze);
     $('btnSample').addEventListener('click', function () {
       $('inputText').value = SAMPLE;
-      $('docTitle').value = '智办通V1.0项目周例会分析';
+      $('docTitle').value = '文策析V1.0项目周例会分析';
       updateCharCount();
       toast('示例已载入，点击「一键智能分析」');
     });
@@ -1026,7 +1055,7 @@
     // #demo-agent-auto：自动进入智能体执行页并执行全部默认动作（演示/截图用）
     if (location.hash.indexOf('demo') >= 0) {
       $('inputText').value = SAMPLE;
-      $('docTitle').value = '智办通V1.0项目周例会分析';
+      $('docTitle').value = '文策析V1.0项目周例会分析';
       updateCharCount();
       var auto = /-auto/.test(location.hash);
       setTimeout(function () {

@@ -10,7 +10,7 @@ const Agent = require('../src/core/agent.js');
 const Adapter = require('../src/core/adapters/mobileclaw.js');
 
 const SAMPLE = [
-  '智办通V1.0产品研发项目周例会会议纪要',
+  '文策析V1.0产品研发项目周例会会议纪要',
   '时间：2026年10月21日 下午2点',
   '1. 请研发部张伟工程师在10月22日下午6点前完成前端兼容性修复并提交代码；',
   '2. 请测试组李娟负责在10月23日完成回归测试，并于当天下午5点前反馈测试报告；',

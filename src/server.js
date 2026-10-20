@@ -1,5 +1,5 @@
 /*!
- * 智办通 AI 智能办公助手 —— 零依赖静态服务器
+ * 文策析 AI 智能办公助手 —— 零依赖静态服务器
  * 使用 Node.js 内置模块，无需 npm install 即可运行。
  */
 const http = require('http');
@@ -7,6 +7,9 @@ const fs = require('fs');
 const path = require('path');
 const os = require('os');
 const { exec } = require('child_process');
+const { parseDocx } = require('./core/docx-parse');
+
+const MAX_DOCX_UPLOAD = 10 * 1024 * 1024; // 上传 Word 上限 10MB
 
 const ROOT = path.resolve(__dirname, '..');
 const PUBLIC_DIR = path.join(ROOT, 'public');
@@ -79,7 +82,45 @@ const server = http.createServer((req, res) => {
   // 健康检查
   if (req.url.startsWith('/api/health')) {
     res.writeHead(200, { 'Content-Type': 'application/json; charset=utf-8', ...SECURITY_HEADERS });
-    res.end(JSON.stringify({ ok: true, app: '智办通AI智能办公助手', time: new Date().toISOString() }));
+    res.end(JSON.stringify({ ok: true, app: '文策析AI智能办公助手', time: new Date().toISOString() }));
+    return;
+  }
+
+  // Word（.docx）上传解析：请求体为原始文件字节，仅在本机服务中处理，不落盘
+  if (req.method === 'POST' && req.url.split('?')[0] === '/api/parse-docx') {
+    const chunks = [];
+    let size = 0;
+    let aborted = false;
+    req.on('data', (chunk) => {
+      if (aborted) return;
+      size += chunk.length;
+      if (size > MAX_DOCX_UPLOAD) {
+        aborted = true;
+        res.writeHead(413, { 'Content-Type': 'application/json; charset=utf-8', ...SECURITY_HEADERS });
+        res.end(JSON.stringify({ ok: false, error: 'Word 文档过大（上限 10MB）' }));
+        req.destroy();
+        return;
+      }
+      chunks.push(chunk);
+    });
+    req.on('end', () => {
+      if (aborted) return;
+      try {
+        const text = parseDocx(Buffer.concat(chunks));
+        res.writeHead(200, { 'Content-Type': 'application/json; charset=utf-8', ...SECURITY_HEADERS });
+        res.end(JSON.stringify({ ok: true, text, chars: text.length }));
+      } catch (e) {
+        res.writeHead(400, { 'Content-Type': 'application/json; charset=utf-8', ...SECURITY_HEADERS });
+        res.end(JSON.stringify({ ok: false, error: String(e && e.message || e) }));
+      }
+    });
+    req.on('error', () => {
+      if (!aborted) {
+        aborted = true;
+        res.writeHead(500, { 'Content-Type': 'application/json; charset=utf-8', ...SECURITY_HEADERS });
+        res.end(JSON.stringify({ ok: false, error: '上传读取失败，请重试' }));
+      }
+    });
     return;
   }
 
@@ -135,7 +176,7 @@ function listen(port) {
     const url = 'http://localhost:' + port;
     const line = '======================================================';
     console.log(line);
-    console.log('  智办通 AI 智能办公助手 已启动');
+    console.log('  文策析 AI 智能办公助手 已启动');
     console.log('  访问地址：' + url);
     console.log('  监听地址：' + HOST + '（仅本机可访问；如需局域网访问请设 HOST=0.0.0.0）');
     console.log('  按 Ctrl + C 可停止服务');

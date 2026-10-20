@@ -1,5 +1,5 @@
 /*!
- * 智办通 v2.1 可视化看板（charts.js）
+ * 文策析 v2.1 可视化看板（charts.js）
  * 纯原生 SVG 渲染，零第三方依赖，完全离线；所有数字直接来自当前分析结果，不做任何模拟。
  * 暴露 window.Charts.render(result) -> HTML 字符串；state.result 为 null 时返回空态提示。
  */

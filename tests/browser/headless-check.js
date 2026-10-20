@@ -260,6 +260,29 @@ async function setViewport(sid, width, height, dpr) {
   check('数据看板 7 个图表齐全', dash.titles === '任务完成进度|优先级分布|置信度分布|一致性检查问题构成|责任人任务分布|任务阶段分布|截止时间线', dash.titles);
   await shot(sid, 'v2-08-dashboard.png');
 
+  // 8c. Word（.docx）上传解析（真实文件经本地服务 /api/parse-docx 解析，再跑任务拆解）
+  await send('DOM.enable', {}, sid);
+  await send('Page.navigate', { url: BASE + '/' }, sid);
+  await sleep(1500);
+  const docDom = await send('DOM.getDocument', { depth: -1 }, sid);
+  const fileNode = await send('DOM.querySelector', { nodeId: docDom.root.nodeId, selector: '#fileInput' }, sid);
+  await send('DOM.setFileInputFiles', { nodeId: fileNode.nodeId, files: [path.join(__dirname, '..', 'fixtures', 'sample.docx')] }, sid);
+  await sleep(2000);
+  const docxLoaded = await evalJs(sid, `(() => {
+    const v = document.getElementById('inputText').value;
+    return { ok: v.indexOf('周例会会议纪要') !== -1 && v.indexOf('张伟') !== -1, chars: v.length };
+  })()`);
+  check('Word(.docx) 上传并经本地服务解析', docxLoaded.ok && docxLoaded.chars > 100, JSON.stringify(docxLoaded));
+  await evalJs(sid, `document.getElementById('btnAnalyze').click()`);
+  await sleep(2000);
+  await evalJs(sid, `document.querySelector('.tab[data-tab="todos"]').click()`);
+  await sleep(400);
+  const docxTodos = await evalJs(sid, `(() => {
+    const text = document.getElementById('pane-todos').innerText;
+    return { count: document.querySelectorAll('.todo-item').length, text: text };
+  })()`);
+  check('Word 文档自动拆出任务（≥3 条，含张伟/李娟）', docxTodos.count >= 3 && docxTodos.text.includes('张伟') && docxTodos.text.includes('李娟'), docxTodos.count + ' 条');
+
   // 9. 手机视口（独立 390 宽无头实例，避免 Emulation 不支持）
   async function mobileShots() {
     const ver2 = await (await fetch('http://127.0.0.1:9223/json/version')).json();

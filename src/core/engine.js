@@ -1,5 +1,5 @@
 /*!
- * 智办通 AI 智能办公助手 —— 中文办公文本分析核心引擎
+ * 文策析 AI 智能办公助手 —— 中文办公文本分析核心引擎
  * 纯本地规则引擎，无需任何外部 API 与第三方依赖即可运行。
  * 同时支持浏览器（window.ZhiBanTong）与 Node.js（module.exports）。
  */
@@ -1295,7 +1295,7 @@
     if (check.summary.contradictionCount) L.push('4. 先解决材料中的矛盾与数据冲突，再据此安排执行。');
     L.push('');
     L.push('---');
-    L.push('*本报告由「智办通 AI 智能办公助手」本地分析引擎生成，无需联网、无需 API 密钥。*');
+    L.push('*本报告由「文策析 AI 智能办公助手」本地分析引擎生成，无需联网、无需 API 密钥。*');
     return L.join('\n');
   }
 
