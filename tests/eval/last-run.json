@@ -1,7 +1,7 @@
 {
   "baseDate": "2026-10-19",
   "caseCount": 16,
-  "msPerDoc": 2.24,
+  "msPerDoc": 2.45,
   "todoRecall": 1,
   "todoPrecision": 1,
   "ownerRecall": 1,
